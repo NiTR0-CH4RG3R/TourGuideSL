@@ -274,6 +274,47 @@ public class Database {
         ExecuteWriteQuery( query );
     }
     
+    public Vehicle[] GetVehicles() {
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
+        
+        
+        try {
+            vehicles.add( new Vehicle( 10, VehicleType.VAN, "HELLO", 5 ) );
+            vehicles.add( new Vehicle( 10, VehicleType.CAR, "HELLO2", 3 ) );
+        }
+        catch( Exception e ) {
+            
+        }
+        
+        return vehicles.toArray( Vehicle[]::new );
+    } 
+    
+    public Vehicle GetVehicle( final int v_id ) {
+        Vehicle vehicle = null;
+
+        return vehicle;
+    }
+    
+    public Vehicle GetVehicleByLicensePlate( final String license_plate ) {
+        Vehicle vehicle = null;
+        
+        return vehicle;
+    }
+    
+    public void AddVehicle( final Vehicle vehicle ) {
+        
+    }
+    
+    public void UpdateVehicle( final Vehicle vehicle ) {
+        
+    }
+    
+    public void RemoveVehicle( final Vehicle vehicle ) {
+        
+    }
+    
+    
+    
     private void ExecuteWriteQuery( final String query ) {
         try {
             PreparedStatement db_prepared_statement = db_connection.prepareCall( query );
