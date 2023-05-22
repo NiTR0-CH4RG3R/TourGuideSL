@@ -49,7 +49,7 @@ public class LoginForm extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(null);
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tourguidesl/beach.jpeg"))); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/beach.jpeg"))); // NOI18N
         jLabel4.setText("jLabel4");
         jPanel1.add(jLabel4);
         jLabel4.setBounds(0, 0, 420, 630);
