@@ -276,15 +276,7 @@ public class Database {
     
     public Vehicle[] GetVehicles() {
         ArrayList<Vehicle> vehicles = new ArrayList<>();
-        
-        
-        try {
-            vehicles.add( new Vehicle( 10, VehicleType.VAN, "HELLO", 5 ) );
-            vehicles.add( new Vehicle( 10, VehicleType.CAR, "HELLO2", 3 ) );
-        }
-        catch( Exception e ) {
-            
-        }
+ 
         
         return vehicles.toArray( Vehicle[]::new );
     } 
@@ -313,7 +305,65 @@ public class Database {
         
     }
     
+    public Driver[] GetDrivers() {
+        ArrayList<Driver> drivers = new ArrayList<>();
+
+        return drivers.toArray( Driver[]::new );
+    }
     
+    public Driver GetDriver( final int d_id ) {
+        Driver driver = null;
+
+        return driver;
+    }
+    
+    public Driver GetDriverByNIC( final String nic ) {
+        Driver driver = null;
+        
+        return driver;
+    }
+    
+    public void AddDriver( final Driver driver ) {
+        
+    }
+    
+    public void UpdateDriver( final Driver driver ) {
+        
+    }
+    
+    public void RemoveDriver( final Driver driver ) {
+        
+    }
+    
+    public Location[] GetLocations() {
+        ArrayList<Location> locations = new ArrayList<>();
+
+        return locations.toArray( Location[]::new );
+    }
+    
+    public Location GetLocation( final int l_id ) {
+        Location location = null;
+
+        return location;
+    }
+    
+    public Location GetLocationByAddress( final String nic ) {
+        Location location = null;
+        
+        return location;
+    }
+    
+    public void AddLocation( final Location location ) {
+        
+    }
+    
+    public void UpdateLocation( final Location location ) {
+        
+    }
+    
+    public void RemoveLocation( final Location location ) {
+        
+    }
     
     private void ExecuteWriteQuery( final String query ) {
         try {
