@@ -48,7 +48,13 @@ public class Application {
         return db;
     }
     
-    static Application g_app = null;
+    public static void DebugInitApp() {
+        g_app = new Application();
+    }
+    
+    public static Application g_app = null;
+    
+    
     public static void main(String[] args) {
         g_app = new Application();
         g_app.Run();
