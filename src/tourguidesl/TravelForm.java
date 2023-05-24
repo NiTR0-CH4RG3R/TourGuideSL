@@ -15,6 +15,7 @@ public final class TravelForm extends javax.swing.JFrame {
      */
     public TravelForm() {
         initComponents();
+        LoadClientsToClientDropDown();
         LoadVehiclesToVehicleDropDown();
         LoadDriversToDriverDropDown();
         LoadLocationsToLocationDropDown();
@@ -30,15 +31,12 @@ public final class TravelForm extends javax.swing.JFrame {
     private void initComponents() {
 
         button_back = new javax.swing.JButton();
-        text_field_name = new javax.swing.JTextField();
-        text_field_email = new javax.swing.JTextField();
         drop_down_location = new javax.swing.JComboBox<>();
         drop_down_vehicle = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         table_records = new javax.swing.JTable();
         text_field_passenger_count = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -51,6 +49,7 @@ public final class TravelForm extends javax.swing.JFrame {
         text_field_time = new javax.swing.JTextField();
         drop_down_driver = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
+        drop_down_client = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Travel Book");
@@ -101,12 +100,8 @@ public final class TravelForm extends javax.swing.JFrame {
         });
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel1.setText("Client Name :");
+        jLabel1.setText("Client :");
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel2.setText("Client Email :");
-        jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Location :");
@@ -152,50 +147,54 @@ public final class TravelForm extends javax.swing.JFrame {
         jLabel8.setText("Driver :");
         jLabel8.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
+        drop_down_client.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        drop_down_client.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                drop_down_clientActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addComponent(drop_down_vehicle, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(button_clear)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(button_update)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(button_add))
-                    .addGroup(layout.createSequentialGroup()
+                .addContainerGap(26, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(53, 53, 53))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel7))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(text_field_name)
-                                .addComponent(text_field_email, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(drop_down_location, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(text_field_passenger_count, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(text_field_time, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(18, 18, 18)
-                        .addComponent(drop_down_driver, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel6))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(button_clear)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(button_update)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(button_add))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel8))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(drop_down_location, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(text_field_time, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(drop_down_vehicle, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(drop_down_driver, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(text_field_passenger_count, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(drop_down_client, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(18, 18, 18)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(button_remove)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(555, 555, 555)
                         .addComponent(button_back))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 741, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25))
         );
         layout.setVerticalGroup(
@@ -204,15 +203,11 @@ public final class TravelForm extends javax.swing.JFrame {
                 .addContainerGap(25, Short.MAX_VALUE)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(text_field_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(text_field_email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1)
+                            .addComponent(drop_down_client, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(drop_down_location, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -233,15 +228,15 @@ public final class TravelForm extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(drop_down_driver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(button_clear)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(button_add)
                         .addComponent(button_update)
-                        .addComponent(button_remove)
-                        .addComponent(button_back)))
+                        .addComponent(button_remove))
+                    .addComponent(button_back))
                 .addGap(25, 25, 25))
         );
 
@@ -265,23 +260,86 @@ public final class TravelForm extends javax.swing.JFrame {
         if ( !( Character.isDigit( evt.getKeyChar() ) ) ) evt.consume();
     }//GEN-LAST:event_text_field_passenger_countKeyTyped
 
+    private void drop_down_clientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drop_down_clientActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_drop_down_clientActionPerformed
+
+    private void LoadClientsToClientDropDown() {
+        drop_down_client.removeAllItems();
+        
+        var clients = Application.g_app.GetDB().GetClients();
+        for ( var client : clients ) {
+            String item = String.format( "%s - %s", client.GetName(), client.GetEmail() );
+            drop_down_client.addItem( item );
+        }
+    }
+    
+    private Client GetSelectedClient() {
+        return Application.g_app.GetDB().GetClients()[drop_down_client.getSelectedIndex() ];
+    }
+    
     private void LoadDriversToDriverDropDown() {
         drop_down_driver.removeAllItems();
         
+        var drivers = Application.g_app.GetDB().GetDrivers();
+        for ( var driver : drivers ) {
+            drop_down_driver.addItem( driver.GetName() );
+        }
+    }
+    
+    private Driver GetSelectedDriver() {
+        return Application.g_app.GetDB().GetDrivers()[drop_down_driver.getSelectedIndex() ];
     }
     
     private void LoadLocationsToLocationDropDown() {
         drop_down_location.removeAllItems();
-        
+        var locations = Application.g_app.GetDB().GetLocations();
+        for ( var location : locations ) {
+            drop_down_location.addItem( location.GetName() );
+        }
+    }
+    
+    private Location GetSelectedLocation() {
+        return Application.g_app.GetDB().GetLocations()[drop_down_location.getSelectedIndex() ];
     }
     
     private void LoadVehiclesToVehicleDropDown() {
         drop_down_vehicle.removeAllItems();
         Vehicle vehicles[] = Application.g_app.GetDB().GetVehicles();
+        
         for ( final var vehicle : vehicles ) {
             String drop_down_item = String.format( "%s - %s", vehicle.GetType().toString(), vehicle.GetLicensePlate() );
             drop_down_vehicle.addItem( drop_down_item );
         }
+    }
+    
+    private Vehicle GetSelectedVehicle() {
+        return Application.g_app.GetDB().GetVehicles()[drop_down_vehicle.getSelectedIndex() ];
+    }
+    
+    public static void main(String[] args) {
+        Application.DebugInitApp();
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (
+                    ClassNotFoundException | 
+                    InstantiationException | 
+                    IllegalAccessException | 
+                    javax.swing.UnsupportedLookAndFeelException
+                    e
+                )
+        {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
+        
+        java.awt.EventQueue.invokeLater(() -> {
+            new TravelForm().setVisible(true);
+        });
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -290,11 +348,11 @@ public final class TravelForm extends javax.swing.JFrame {
     private javax.swing.JButton button_clear;
     private javax.swing.JButton button_remove;
     private javax.swing.JButton button_update;
+    private javax.swing.JComboBox<String> drop_down_client;
     private javax.swing.JComboBox<String> drop_down_driver;
     private javax.swing.JComboBox<String> drop_down_location;
     private javax.swing.JComboBox<String> drop_down_vehicle;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -303,8 +361,6 @@ public final class TravelForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table_records;
-    private javax.swing.JTextField text_field_email;
-    private javax.swing.JTextField text_field_name;
     private javax.swing.JTextField text_field_passenger_count;
     private javax.swing.JTextField text_field_time;
     // End of variables declaration//GEN-END:variables
