@@ -4,6 +4,9 @@
  */
 package tourguidesl;
 
+import java.time.LocalDateTime;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author USER
@@ -19,6 +22,8 @@ public final class TravelForm extends javax.swing.JFrame {
         LoadVehiclesToVehicleDropDown();
         LoadDriversToDriverDropDown();
         LoadLocationsToLocationDropDown();
+        RefreshTableRecords();
+        ClearForm();
     }
 
     /**
@@ -90,6 +95,11 @@ public final class TravelForm extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        table_records.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                table_recordsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(table_records);
 
         text_field_passenger_count.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -116,8 +126,18 @@ public final class TravelForm extends javax.swing.JFrame {
         jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
         button_clear.setText("Clear");
+        button_clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_clearActionPerformed(evt);
+            }
+        });
 
         button_remove.setText("Remove");
+        button_remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_removeActionPerformed(evt);
+            }
+        });
 
         button_update.setText("Update");
         button_update.addActionListener(new java.awt.event.ActionListener() {
@@ -232,10 +252,10 @@ public final class TravelForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(button_clear)
+                    .addComponent(button_remove)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(button_add)
-                        .addComponent(button_update)
-                        .addComponent(button_remove))
+                        .addComponent(button_update))
                     .addComponent(button_back))
                 .addGap(25, 25, 25))
         );
@@ -249,11 +269,45 @@ public final class TravelForm extends javax.swing.JFrame {
     }//GEN-LAST:event_button_backActionPerformed
 
     private void button_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_addActionPerformed
-        // TODO add your handling code here:
+        try {
+            int c_id = GetSelectedClient().GetId();
+            int l_id = GetSelectedLocation().GetId();
+            int v_id = GetSelectedVehicle().GetId();
+            int d_id = GetSelectedDriver().GetId();
+            int passanger_count = Integer.valueOf( text_field_passenger_count.getText() );
+            LocalDateTime departure_time = Utility.StringToLocalDateTime( text_field_time.getText() );
+
+            TravelEntry entry = new TravelEntry( c_id, l_id, v_id, d_id, passanger_count, departure_time );
+            Application.g_app.GetDB().AddTravelEntry( entry );
+
+            RefreshTableRecords();
+            ClearForm();
+        }
+        catch( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
     }//GEN-LAST:event_button_addActionPerformed
 
     private void button_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_updateActionPerformed
-        // TODO add your handling code here:
+        try {    
+            LoadEntryToForm();
+
+            int c_id = GetSelectedClient().GetId();
+            int l_id = GetSelectedLocation().GetId();
+            int v_id = GetSelectedVehicle().GetId();
+            int d_id = GetSelectedDriver().GetId();
+            int passanger_count = Integer.valueOf( text_field_passenger_count.getText() );
+            LocalDateTime departure_time = Utility.StringToLocalDateTime( text_field_time.getText() );
+
+            TravelEntry entry = new TravelEntry( GetSelectedTravelEntry().GetId(), c_id, l_id, v_id, d_id, passanger_count, departure_time );
+            Application.g_app.GetDB().AddTravelEntry( entry );
+
+            RefreshTableRecords();
+            ClearForm();
+        }
+        catch( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
     }//GEN-LAST:event_button_updateActionPerformed
 
     private void text_field_passenger_countKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_text_field_passenger_countKeyTyped
@@ -264,13 +318,45 @@ public final class TravelForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_drop_down_clientActionPerformed
 
+    private void table_recordsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_recordsMouseClicked
+        try { 
+            LoadEntryToForm();
+        }
+        catch( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
+    }//GEN-LAST:event_table_recordsMouseClicked
+
+    private void button_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_clearActionPerformed
+        try {
+            ClearForm();
+        }
+        catch( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
+    }//GEN-LAST:event_button_clearActionPerformed
+
+    private void button_removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_removeActionPerformed
+        try {    
+            Application.g_app.GetDB().RemoveTravelEntry( GetSelectedTravelEntry() );
+            RefreshTableRecords();
+        }
+        catch( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
+    }//GEN-LAST:event_button_removeActionPerformed
+
     private void LoadClientsToClientDropDown() {
-        drop_down_client.removeAllItems();
-        
-        var clients = Application.g_app.GetDB().GetClients();
-        for ( var client : clients ) {
-            String item = String.format( "%s - %s", client.GetName(), client.GetEmail() );
-            drop_down_client.addItem( item );
+        try {
+            drop_down_client.removeAllItems();
+
+            var clients = Application.g_app.GetDB().GetClients();
+            for ( var client : clients ) {
+                drop_down_client.addItem( client.toString() );
+            }
+        }
+        catch( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
         }
     }
     
@@ -279,11 +365,16 @@ public final class TravelForm extends javax.swing.JFrame {
     }
     
     private void LoadDriversToDriverDropDown() {
-        drop_down_driver.removeAllItems();
-        
-        var drivers = Application.g_app.GetDB().GetDrivers();
-        for ( var driver : drivers ) {
-            drop_down_driver.addItem( driver.GetName() );
+        try {
+            drop_down_driver.removeAllItems();
+
+            var drivers = Application.g_app.GetDB().GetDrivers();
+            for ( var driver : drivers ) {
+                drop_down_driver.addItem( driver.toString() );
+            }
+        }
+        catch( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
         }
     }
     
@@ -292,10 +383,15 @@ public final class TravelForm extends javax.swing.JFrame {
     }
     
     private void LoadLocationsToLocationDropDown() {
-        drop_down_location.removeAllItems();
-        var locations = Application.g_app.GetDB().GetLocations();
-        for ( var location : locations ) {
-            drop_down_location.addItem( location.GetName() );
+        try {
+            drop_down_location.removeAllItems();
+            var locations = Application.g_app.GetDB().GetLocations();
+            for ( var location : locations ) {
+                drop_down_location.addItem( location.toString() );
+            }
+        }
+        catch( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
         }
     }
     
@@ -304,17 +400,87 @@ public final class TravelForm extends javax.swing.JFrame {
     }
     
     private void LoadVehiclesToVehicleDropDown() {
-        drop_down_vehicle.removeAllItems();
-        Vehicle vehicles[] = Application.g_app.GetDB().GetVehicles();
-        
-        for ( final var vehicle : vehicles ) {
-            String drop_down_item = String.format( "%s - %s", vehicle.GetType().toString(), vehicle.GetLicensePlate() );
-            drop_down_vehicle.addItem( drop_down_item );
+        try {
+            drop_down_vehicle.removeAllItems();
+            Vehicle vehicles[] = Application.g_app.GetDB().GetVehicles();
+
+            for ( final var vehicle : vehicles ) {
+                drop_down_vehicle.addItem( vehicle.toString() );
+            }
+        }
+        catch( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
         }
     }
     
     private Vehicle GetSelectedVehicle() {
         return Application.g_app.GetDB().GetVehicles()[drop_down_vehicle.getSelectedIndex() ];
+    }
+    
+    private TravelEntry GetSelectedTravelEntry() {
+        int selected_row = table_records.getSelectedRow();
+        int id = Integer.parseInt( table_records.getModel().getValueAt( selected_row, 0 ).toString() );
+        return Application.g_app.GetDB().GetTravelEntry(id);
+    }
+    
+    private void RefreshTableRecords() {
+        try {
+            DefaultTableModel table_model = ( DefaultTableModel ) table_records.getModel();
+            table_model.setRowCount( 0 );
+
+            TravelEntry[] entries = Application.g_app.GetDB().GetTravelEntries();
+            for ( var entry : entries ) {
+                Client client = Application.g_app.GetDB().GetClient( entry.GetCustomerId() );
+                Location location = Application.g_app.GetDB().GetLocation( entry.GetLocationId() );
+                Driver driver = Application.g_app.GetDB().GetDriver( entry.GetDriverId() );
+                Vehicle vehicle = Application.g_app.GetDB().GetVehicle( entry.GetVehicleId() );
+                String data[] = { 
+                    String.valueOf( entry.GetId() ), 
+                    client.GetName(), 
+                    client.GetEmail(), 
+                    location.GetName(),
+                    String.valueOf( entry.GetPassangerCount() ),
+                    Utility.LocalDateTimeToString( entry.GetDepartureTime()),
+                    String.valueOf( vehicle.GetId() ), 
+                    driver.GetName(),
+                    vehicle.GetLicensePlate()
+                };
+                
+                table_model.addRow( data );
+            }
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
+    }
+    
+    private void LoadEntryToForm() {
+        try {
+            var entry = GetSelectedTravelEntry();
+            drop_down_client.setSelectedItem( Application.g_app.GetDB().GetClient(entry.GetCustomerId()).toString() );
+            drop_down_driver.setSelectedItem( Application.g_app.GetDB().GetDriver(entry.GetDriverId()).toString() );
+            drop_down_location.setSelectedItem( Application.g_app.GetDB().GetLocation(entry.GetLocationId()).toString() );
+            drop_down_vehicle.setSelectedItem( Application.g_app.GetDB().GetVehicle(entry.GetVehicleId()).toString() );
+            text_field_passenger_count.setText( String.valueOf(entry.GetPassangerCount()) );
+            text_field_time.setText( Utility.LocalDateTimeToString(entry.GetDepartureTime()) );
+        }
+        catch( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
+    }
+    
+    private void ClearForm() {
+        try {
+            drop_down_client.setSelectedItem(null);
+            drop_down_driver.setSelectedItem(null);
+            drop_down_location.setSelectedItem(null);
+            drop_down_vehicle.setSelectedItem(null);
+            text_field_passenger_count.setText( "" );
+            text_field_time.setText( "" );
+        }
+        catch( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
     }
     
     public static void main(String[] args) {
