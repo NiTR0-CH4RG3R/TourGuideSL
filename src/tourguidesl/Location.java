@@ -56,6 +56,8 @@ public class Location {
         return description;
     }
     
-    
-    
+    @Override
+    public String toString() {
+        return String.format("%s", this.name);
+    }
 }

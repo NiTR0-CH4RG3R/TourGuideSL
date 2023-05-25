@@ -68,4 +68,9 @@ public class Client {
     public int GetAge() { return age; }
     public Gender GetGender() { return gender; }
     
+    @Override
+    public String toString() {
+        return String.format("%s - %s", this.name, this.email);
+    }
+    
 }

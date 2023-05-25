@@ -56,4 +56,8 @@ public class Vehicle {
 
     public int GetPassengerCount() { return passenger_count; }
     
+     @Override
+    public String toString() {
+        return String.format("%s - %s", this.type.toString(), this.license_plate);
+    }
 }
