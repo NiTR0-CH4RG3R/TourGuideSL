@@ -276,14 +276,46 @@ public class Database {
     
     public Vehicle[] GetVehicles() {
         ArrayList<Vehicle> vehicles = new ArrayList<>();
- 
+        
+        try {
+            var result = ExecuteReadQuery( "SELECT * FROM vehicles" );
+            while( result.next() ) {
+                int v_id = result.getInt( "v_id" );
+                VehicleType v_type = Utility.StringToVehicleType( result.getString( "v_type" ) );
+                String v_license_plate = result.getString( "v_license_plate" );
+                int v_passenger_count = result.getInt( "v_passenger_count" );
+                
+                vehicles.add( new Vehicle( v_id, v_type, v_license_plate, v_passenger_count ) );
+            }
+        }
+        catch( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
         
         return vehicles.toArray( Vehicle[]::new );
     } 
     
-    public Vehicle GetVehicle( final int v_id ) {
+    public Vehicle GetVehicle( final int id ) {
         Vehicle vehicle = null;
+        
+        try {
+            var result = ExecuteReadQuery( 
+                    String.format(
+                    "SELECT * FROM vehicles WHERE v_Id=%d", id
+                    )
+            );
+            result.next();
+            int v_id = result.getInt( "v_id" );
+            VehicleType v_type = Utility.StringToVehicleType( result.getString( "v_type" ) );
+            String v_license_plate = result.getString( "v_license_plate" );
+            int v_passenger_count = result.getInt( "v_passenger_count" );
 
+            vehicle = new Vehicle( v_id, v_type, v_license_plate, v_passenger_count );
+            
+        }
+        catch( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
         return vehicle;
     }
     
@@ -307,62 +339,339 @@ public class Database {
     
     public Driver[] GetDrivers() {
         ArrayList<Driver> drivers = new ArrayList<>();
-
+        
+        try {
+            var result = ExecuteReadQuery( "SELECT * FROM drivers" );
+            while( result.next() ) {
+                int d_id = result.getInt( "d_id" );
+                String d_name = result.getString( "d_name" );
+                String d_driving_license = result.getString( "d_driving_license" );
+                String d_national_id = result.getString( "d_national_id" );
+                String d_contact = result.getString( "d_contact" );
+                
+                drivers.add(
+                        new Driver( d_id, d_name, d_driving_license, d_national_id, d_contact )
+                );
+            }
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
+        
         return drivers.toArray( Driver[]::new );
     }
     
-    public Driver GetDriver( final int d_id ) {
+    public Driver GetDriver( final int id ) {
         Driver driver = null;
+        
+        try {
+            var result = ExecuteReadQuery( 
+                    String.format( "SELECT * FROM drivers WHERE d_id=%d", id )
+                    );
+            
+            result.next();
+            int d_id = result.getInt( "d_id" );
+            String d_name = result.getString( "d_name" );
+            String d_driving_license = result.getString( "d_driving_license" );
+            String d_national_id = result.getString( "d_national_id" );
+            String d_contact = result.getString( "d_contact" );
 
+            driver = new Driver( d_id, d_name, d_driving_license, d_national_id, d_contact );
+
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
+        
         return driver;
     }
     
     public Driver GetDriverByNIC( final String nic ) {
         Driver driver = null;
         
+        try {
+            var result = ExecuteReadQuery( 
+                    String.format( "SELECT * FROM drivers WHERE d_national_id='%s'", nic )
+                    );
+            
+            result.next();
+            int d_id = result.getInt( "d_id" );
+            String d_name = result.getString( "d_name" );
+            String d_driving_license = result.getString( "d_driving_license" );
+            String d_national_id = result.getString( "d_national_id" );
+            String d_contact = result.getString( "d_contact" );
+
+            driver = new Driver( d_id, d_name, d_driving_license, d_national_id, d_contact );
+
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
+        
         return driver;
     }
     
     public void AddDriver( final Driver driver ) {
-        
+        try {
+            ExecuteWriteQuery( 
+                String.format( 
+                        "INSERT INTO drivers( d_name, d_driving_license, d_national_id, d_contact ) VALUES( '%s', '%s', '%s', '%s' )", 
+                        driver.GetName(), 
+                        driver.GetDrivingLicense(), 
+                        driver.GetNIC(), 
+                        driver.GetContact() 
+                )
+            );
+
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
     }
     
     public void UpdateDriver( final Driver driver ) {
-        
+        try {
+            ExecuteWriteQuery( 
+                String.format( 
+                        "UPDATE drivers SET d_name='%s', d_driving_license='%s', d_national_id='%s', d_contact='%s' WHERE d_id=%d", 
+                        driver.GetName(), 
+                        driver.GetDrivingLicense(), 
+                        driver.GetNIC(), 
+                        driver.GetContact(),
+                        driver.GetId()
+                )
+            );
+
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
     }
     
     public void RemoveDriver( final Driver driver ) {
-        
+        try {
+            ExecuteWriteQuery( 
+                String.format( 
+                        "DELETE FROM drivers WHERE d_id=%d", 
+                        driver.GetId()
+                )
+            );
+
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
     }
     
     public Location[] GetLocations() {
         ArrayList<Location> locations = new ArrayList<>();
+        
+        try {
+            var result = ExecuteReadQuery( "SELECT * FROM locations" );
+            while ( result.next() ) {
+                int l_id = result.getInt( "l_id" );
+                String l_name = result.getString( "l_name" );
+                String l_address = result.getString( "l_address" );
+                String l_description = result.getString( "l_description" );
+                
+                locations.add( new Location( l_id, l_name, l_address, l_description ) );
+            }
 
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
+        
         return locations.toArray( Location[]::new );
     }
     
-    public Location GetLocation( final int l_id ) {
+    public Location GetLocation( final int id ) {
         Location location = null;
+        try {
+            var result = ExecuteReadQuery( String.format( "SELECT * FROM locations WHERE l_id=%d", id ) );
 
+            result.next();
+            int l_id = result.getInt( "l_id" );
+            String l_name = result.getString( "l_name" );
+            String l_address = result.getString( "l_address" );
+            String l_description = result.getString( "l_description" );
+
+            location = new Location( l_id, l_name, l_address, l_description );
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
         return location;
     }
     
-    public Location GetLocationByAddress( final String nic ) {
+    public Location GetLocationByAddress( final String address ) {
         Location location = null;
-        
+        try {
+            var result = ExecuteReadQuery( String.format( "SELECT * FROM locations WHERE l_address='%s'", address ) );
+
+            result.next();
+            int l_id = result.getInt( "l_id" );
+            String l_name = result.getString( "l_name" );
+            String l_address = result.getString( "l_address" );
+            String l_description = result.getString( "l_description" );
+
+            location = new Location( l_id, l_name, l_address, l_description );
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
         return location;
     }
     
     public void AddLocation( final Location location ) {
-        
+        try {
+            ExecuteWriteQuery( 
+                String.format( 
+                    "INSERT INTO locations( l_name, l_address, l_description ) VALUES( '%s', '%s', '%s' )", 
+                    location.GetName(), 
+                    location.GetAddress(), 
+                    location.GetDescription()
+                )
+            );
+
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
     }
     
     public void UpdateLocation( final Location location ) {
-        
+        try {
+            ExecuteWriteQuery( 
+                String.format( 
+                    "UPDATE locations SET l_name='%s', l_address='%s', l_description='%s' WHERE l_id=%d", 
+                    location.GetName(), 
+                    location.GetAddress(), 
+                    location.GetDescription(),
+                    location.GetId()
+                )
+            );
+
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
     }
     
     public void RemoveLocation( final Location location ) {
+        try {
+            ExecuteWriteQuery( 
+                String.format( 
+                    "DELETE FROM locations WHERE l_id=%d", 
+                    location.GetId()
+                )
+            );
+
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
+    }
+    
+    public TravelEntry[] GetTravelEntries() {
+        ArrayList<TravelEntry> entries = new ArrayList<>();
+
+        try {
+            var result = ExecuteReadQuery( "SELECT * FROM travels" );
+            while( result.next() ) {
+                int t_id = result.getInt("t_id");
+                int t_c_id = result.getInt("t_c_id");
+                int t_l_id = result.getInt("t_l_id");
+                int t_v_id = result.getInt("t_v_id");
+                int t_d_id = result.getInt("t_d_id");
+                int t_passenger_count = result.getInt("t_passenger_count"); 
+                LocalDateTime t_departure_time = Utility.StringToLocalDateTime(result.getString("t_departure_time"));
+                
+                entries.add(
+                        new TravelEntry( t_id, t_c_id, t_l_id, t_v_id, t_d_id, t_passenger_count, t_departure_time)
+                );
+            }
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
         
+        return entries.toArray( TravelEntry[]::new );
+    }
+    
+    public TravelEntry GetTravelEntry( final int id ) {
+        TravelEntry entry = null;
+        try {
+            var result = ExecuteReadQuery( "SELECT * FROM travels WHERE t_id=" + id );
+            result.next() ;
+            int t_id = result.getInt("t_id");
+            int t_c_id = result.getInt("t_c_id");
+            int t_l_id = result.getInt("t_l_id");
+            int t_v_id = result.getInt("t_v_id");
+            int t_d_id = result.getInt("t_d_id");
+            int t_passenger_count = result.getInt("t_passenger_count"); 
+            LocalDateTime t_departure_time = Utility.StringToLocalDateTime(result.getString("t_departure_time"));
+
+            entry = new TravelEntry( t_id, t_c_id, t_l_id, t_v_id, t_d_id, t_passenger_count, t_departure_time);
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
+        return entry;
+    }
+    
+
+    
+    public void AddTravelEntry( final TravelEntry entry ) {
+        try {
+            ExecuteWriteQuery( 
+            String.format( 
+                    "INSERT INTO travels(t_c_id, t_l_id, t_v_id, t_d_id, t_passenger_count, t_departure_time) VALUES( %d, %d, %d, %d, %d, '%s' )",
+                    entry.GetCustomerId(),
+                    entry.GetLocationId(),
+                    entry.GetVehicleId(),
+                    entry.GetDriverId(),
+                    entry.GetPassangerCount(),
+                    Utility.LocalDateTimeToString(entry.GetDepartureTime())
+                )
+            );
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }
+    }
+    
+    public void UpdateTravelEntry( final TravelEntry entry ) {
+        try {
+            ExecuteWriteQuery( 
+            String.format( 
+                    "UPDATE travels SET t_c_id=%d, t_l_id=%d, t_v_id=%d, t_d_id=%d, t_passenger_count=%d, t_departure_time=%s",
+                    entry.GetCustomerId(),
+                    entry.GetLocationId(),
+                    entry.GetVehicleId(),
+                    entry.GetDriverId(),
+                    entry.GetPassangerCount(),
+                    Utility.LocalDateTimeToString(entry.GetDepartureTime())
+                )
+            );
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }   
+    }
+    
+    public void RemoveTravelEntry( final TravelEntry entry ) {
+        try {
+            ExecuteWriteQuery( 
+            String.format( 
+                    "DELETE FROM travels WHERE t_id=%d",
+                    entry.GetId()
+                )
+            );
+        }
+        catch ( Exception e ) {
+            System.out.println( "[ERROR] : " + e.getMessage() );
+        }   
     }
     
     private void ExecuteWriteQuery( final String query ) {
